@@ -16,11 +16,9 @@ namespace TaskListMobile.Pages
     public partial class TaskListDetail : ContentPage
     {
         public TaskListDetailViewModel ViewModel { get; set; }
-        public TaskListDetail(DateTime? date = null)
+        public TaskListDetail(TaskListDetailViewModel viewModel)
         {
-            date = date ?? DateTime.Now.Date;
-            ViewModel = new TaskListDetailViewModel(DIContainer.Resolve<ITaskListRepository>(),
-                date.Value);
+            ViewModel = viewModel;
             InitializeComponent();
             BindingContext = ViewModel;
         }

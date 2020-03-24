@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
 using TaskListMobile.Pages;
+using TaskListMobile.Sevices;
 using TaskListMobileData.Models;
 using TaskListMobileData.Repositories;
 using Xamarin.Forms;
@@ -16,15 +17,15 @@ namespace TaskListMobile.ViewModels
     {
         private ObservableCollection<TaskList> _model;
         private readonly ITaskListRepository _taskListRepository;
-        private readonly INavigation _navigation;
+        private readonly INavigationService _navigationService;
 
         public TaskListIndexViewModel(
-            ITaskListRepository taskListRepository, 
+            ITaskListRepository taskListRepository,
             DateTime taskListDate,
-            INavigation navigation)
+            INavigationService navigationService)
         {
             _taskListRepository = taskListRepository;
-            _navigation = navigation;
+            _navigationService = navigationService;
             _model = new ObservableCollection<TaskList>(
                 _taskListRepository.Get(taskListDate, null));
         }
@@ -36,7 +37,7 @@ namespace TaskListMobile.ViewModels
                 .SetPlaceholder("Enter Date (MM-dd-yyyy)")
                 .SetInputMode(InputType.Name));
             var date = DateTime.Parse(dateString.Text);
-            await _navigation.PushAsync(new TaskListDetail(date));
+            _navigationService.GoToTaskListDetails(date);
         }
         public ObservableCollection<TaskList> TaskLists
         {

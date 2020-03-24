@@ -16,15 +16,10 @@ namespace TaskListMobile.Pages
     public partial class TaskListIndex : ContentPage
     {
         public TaskListIndexViewModel ViewModel { get; set; }
-        public TaskListIndex()
+        public TaskListIndex(TaskListIndexViewModel viewModel)
         {
             InitializeComponent();
-            //ViewModel = new TaskListIndexViewModel(new TaskListRepository(FileService.GetDbFilePath()),
-            //    DateTime.Now.Date,
-            //    Navigation);
-            ViewModel = new TaskListIndexViewModel(DIContainer.Resolve<ITaskListRepository>(),
-                DateTime.Now.Date,
-                Navigation);
+            ViewModel = viewModel;
             BindingContext = ViewModel;
         }
     }

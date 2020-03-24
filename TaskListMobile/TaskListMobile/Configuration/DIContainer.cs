@@ -13,6 +13,7 @@ namespace TaskListMobile.Configuration
         public static void RegisterDependencies()
         {
             var builder = new ContainerBuilder();
+            builder.RegisterType<NavigationService>().As<INavigationService>().SingleInstance();
             builder.RegisterType<TaskListRepository>().As<ITaskListRepository>().SingleInstance()
                 .WithParameter(new TypedParameter(typeof(string), FileService.GetDbFilePath()));
 
