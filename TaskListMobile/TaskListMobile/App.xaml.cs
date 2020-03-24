@@ -1,4 +1,5 @@
 ﻿using System;
+using TaskListMobile.Configuration;
 using TaskListMobile.Pages;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,6 +11,8 @@ namespace TaskListMobile
         public App()
         {
             InitializeComponent();
+            DIContainer.RegisterDependencies();
+
             MainPage = new NavigationPage(new TaskListIndex());
 
             //MainPage = new NavigationPage(new TaskListDetail());

@@ -6,7 +6,7 @@ using TaskListMobileData.Models;
 
 namespace TaskListMobileData.Repositories
 {
-    public interface ITaskListRepository
+    public interface ITaskListRepository 
     {
         TaskList Create(TaskList taskList);
         TaskList Get(DateTime date);
@@ -25,6 +25,7 @@ namespace TaskListMobileData.Repositories
             _connection.GetCollection<TaskList>().Insert(taskList);
             return taskList;
         }
+       
 
         public TaskList Get(DateTime date)
         {

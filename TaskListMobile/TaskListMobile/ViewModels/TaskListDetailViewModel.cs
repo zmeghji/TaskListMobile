@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using TaskListMobileData.Enums;
 using TaskListMobileData.Models;
@@ -7,10 +8,19 @@ using TaskListMobileData.Repositories;
 
 namespace TaskListMobile.ViewModels
 {
-    public class TaskListDetailViewModel
+    public class TaskListDetailViewModel : ViewModelBase
     {
         private readonly ITaskListRepository _taskListRepository;
-        public TaskList Model;
+        private TaskList _model;
+        public TaskList Model
+        {
+            get { return _model; }
+            private set
+            {
+                _model = value;
+                RaisePropertyChangedEvent(nameof(Model));
+            }
+        }
 
         public TaskListDetailViewModel(ITaskListRepository taskListRepository, DateTime taskListDate)
         {

@@ -8,7 +8,7 @@ namespace TaskListMobile.Sevices
 {
     public class FileService
     {
-        public const string DbFileName = "TaskList.db";
+        const string DbFileName = "TaskList.db";
 
         public static string GetDbFilePath()
         {

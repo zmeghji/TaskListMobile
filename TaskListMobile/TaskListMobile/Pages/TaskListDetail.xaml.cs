@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskListMobile.Configuration;
 using TaskListMobile.Sevices;
 using TaskListMobile.ViewModels;
 using TaskListMobileData.Repositories;
@@ -15,14 +16,13 @@ namespace TaskListMobile.Pages
     public partial class TaskListDetail : ContentPage
     {
         public TaskListDetailViewModel ViewModel { get; set; }
-        public TaskListDetail()
+        public TaskListDetail(DateTime? date = null)
         {
-            ViewModel = new TaskListDetailViewModel(
-                new TaskListRepository(FileService.GetDbFilePath()),
-                DateTime.Now.Date);
+            date = date ?? DateTime.Now.Date;
+            ViewModel = new TaskListDetailViewModel(DIContainer.Resolve<ITaskListRepository>(),
+                date.Value);
             InitializeComponent();
             BindingContext = ViewModel;
-            //TaskItemsListView.ItemsSource = ViewModel.Model.TaskItems;
         }
     }
 }

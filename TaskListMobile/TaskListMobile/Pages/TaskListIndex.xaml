@@ -7,6 +7,7 @@
              x:Class="TaskListMobile.Pages.TaskListIndex">
     <ContentPage.Content>
         <StackLayout>
+            <Label>Task List Index Page</Label>
             <ListView CachingStrategy="RecycleElement" x:Name="TaskListsView" ItemsSource="{Binding TaskLists}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -16,6 +17,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Button Text="Create" Command="{Binding DisplayCreateDialogCommand}"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskListMobile.Configuration;
 using TaskListMobile.Sevices;
 using TaskListMobile.ViewModels;
 using TaskListMobileData.Repositories;
@@ -18,8 +19,12 @@ namespace TaskListMobile.Pages
         public TaskListIndex()
         {
             InitializeComponent();
-            ViewModel = new TaskListIndexViewModel(new TaskListRepository(FileService.GetDbFilePath()),
-                DateTime.Now.Date);
+            //ViewModel = new TaskListIndexViewModel(new TaskListRepository(FileService.GetDbFilePath()),
+            //    DateTime.Now.Date,
+            //    Navigation);
+            ViewModel = new TaskListIndexViewModel(DIContainer.Resolve<ITaskListRepository>(),
+                DateTime.Now.Date,
+                Navigation);
             BindingContext = ViewModel;
         }
     }
