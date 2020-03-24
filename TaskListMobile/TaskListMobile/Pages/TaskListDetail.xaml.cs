@@ -22,5 +22,6 @@ namespace TaskListMobile.Pages
             InitializeComponent();
             BindingContext = ViewModel;
         }
+
     }
 }

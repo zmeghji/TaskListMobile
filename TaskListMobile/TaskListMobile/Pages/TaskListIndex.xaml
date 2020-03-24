@@ -8,7 +8,11 @@
     <ContentPage.Content>
         <StackLayout>
             <Label>Task List Index Page</Label>
-            <ListView CachingStrategy="RecycleElement" x:Name="TaskListsView" ItemsSource="{Binding TaskLists}">
+            <ListView 
+                CachingStrategy="RecycleElement" 
+                x:Name="TaskListsView" 
+                ItemsSource="{Binding TaskLists}"
+                ItemTapped="TaskListsView_ItemTapped">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

@@ -9,6 +9,7 @@ namespace TaskListMobileData.Repositories
     public interface ITaskListRepository 
     {
         TaskList Create(TaskList taskList);
+        TaskList Update(TaskList taskList);
         TaskList Get(DateTime date);
         List<TaskList> Get(DateTime? fromDate, DateTime? toDate);
     }
@@ -51,6 +52,12 @@ namespace TaskListMobileData.Repositories
             {
                 return queryable.ToList();
             }
+        }
+
+        public TaskList Update(TaskList taskList)
+        {
+            _connection.GetCollection<TaskList>().Update(taskList);
+            return taskList;
         }
     }
 }

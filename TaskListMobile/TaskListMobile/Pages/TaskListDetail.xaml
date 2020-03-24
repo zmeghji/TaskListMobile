@@ -9,13 +9,17 @@
         <StackLayout>
             <Label>Task List Detail Page</Label>
             <Label Text="{Binding Model.Date, StringFormat='{0:MMMM dd, yyyy}'}"></Label>
-            <ListView CachingStrategy="RecycleElement" x:Name="TaskItemsListView" ItemsSource="{Binding Model.TaskItems}">
+            <ListView 
+                CachingStrategy="RecycleElement" 
+                x:Name="TaskItemsListView" 
+                ItemsSource="{Binding Model.TaskItems}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextCell Text="{Binding Name}" Detail="{Binding Status}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Button Text="Create" Command="{Binding DisplayCreateDialogCommand}"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

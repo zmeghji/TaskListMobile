@@ -22,5 +22,10 @@ namespace TaskListMobile.Pages
             ViewModel = viewModel;
             BindingContext = ViewModel;
         }
+
+        private void TaskListsView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            ViewModel.GoToTaskListCommand.Execute(e.Item);
+        }
     }
 }

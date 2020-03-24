@@ -5,6 +5,9 @@ using System.Text;
 using TaskListMobileData.Enums;
 using TaskListMobileData.Models;
 using TaskListMobileData.Repositories;
+using System.Windows.Input;
+using Xamarin.Forms;
+using Acr.UserDialogs;
 
 namespace TaskListMobile.ViewModels
 {
@@ -21,13 +24,27 @@ namespace TaskListMobile.ViewModels
                 RaisePropertyChangedEvent(nameof(Model));
             }
         }
+        public ICommand DisplayCreateDialogCommand => new Command(OnClickedCreateButton);
+        private async void OnClickedCreateButton()
+        {
+            var newTaskName = await UserDialogs.Instance.PromptAsync(new PromptConfig()
+                .SetTitle("Create Task")
+                .SetPlaceholder("Enter Name")
+                .SetInputMode(InputType.Name));
+            Model.TaskItems.Add(new TaskItem
+            {
+                Name = newTaskName.Text,
+                Status = TaskItemStatus.Pending
+            });
+            _taskListRepository.Update(Model);
+        }
 
         public TaskListDetailViewModel(ITaskListRepository taskListRepository, DateTime taskListDate)
         {
             _taskListRepository = taskListRepository;
 
             Model = _taskListRepository.Get(taskListDate);
-            
+
             if (Model == null)
             {
                 Model = new TaskList

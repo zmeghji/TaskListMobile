@@ -29,6 +29,12 @@ namespace TaskListMobile.ViewModels
             _model = new ObservableCollection<TaskList>(
                 _taskListRepository.Get(taskListDate, null));
         }
+
+        public ICommand GoToTaskListCommand => new Command<TaskList>(OnClickTaskList);
+        private async void OnClickTaskList(TaskList taskList)
+        {
+            _navigationService.GoToTaskListDetails(taskList.Date);
+        }
         public ICommand DisplayCreateDialogCommand => new Command(OnClickedCreateButton);
         private async void OnClickedCreateButton()
         {
