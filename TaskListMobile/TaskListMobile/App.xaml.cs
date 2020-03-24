@@ -10,8 +10,9 @@ namespace TaskListMobile
         public App()
         {
             InitializeComponent();
+            MainPage = new NavigationPage(new TaskListIndex());
 
-            MainPage = new NavigationPage(new TaskListDetail());
+            //MainPage = new NavigationPage(new TaskListDetail());
         }
 
         protected override void OnStart()

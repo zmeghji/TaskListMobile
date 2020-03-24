@@ -9,7 +9,8 @@ namespace TaskListMobileData.Repositories
     public interface ITaskListRepository
     {
         TaskList Create(TaskList taskList);
-        TaskList GetByDate(DateTime date);
+        TaskList Get(DateTime date);
+        List<TaskList> Get(DateTime? fromDate, DateTime? toDate);
     }
     public class TaskListRepository : ITaskListRepository
     {
@@ -25,9 +26,30 @@ namespace TaskListMobileData.Repositories
             return taskList;
         }
 
-        public TaskList GetByDate(DateTime date)
+        public TaskList Get(DateTime date)
         {
             return _connection.GetCollection<TaskList>().Query().Where(t => t.Date == date).SingleOrDefault();
+        }
+
+        public List<TaskList> Get(DateTime? fromDate, DateTime? toDate)
+        {
+            var queryable = _connection.GetCollection<TaskList>().Query();
+            if (fromDate.HasValue && toDate.HasValue)
+            {
+                return queryable.Where(t => t.Date >= fromDate && t.Date <= toDate).ToList();
+            }
+            else if (fromDate.HasValue)
+            {
+                return queryable.Where(t => t.Date >= fromDate).ToList();
+            }
+            else if (toDate.HasValue)
+            {
+                return queryable.Where(t => t.Date <= toDate).ToList();
+            }
+            else
+            {
+                return queryable.ToList();
+            }
         }
     }
 }

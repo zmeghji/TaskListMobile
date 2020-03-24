@@ -7,9 +7,15 @@
              x:Class="TaskListMobile.Pages.TaskListIndex">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <ListView CachingStrategy="RecycleElement" x:Name="TaskListsView" ItemsSource="{Binding TaskLists}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Label Text="{Binding Date, StringFormat='{0:MMMM dd, yyyy}'}"></Label>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

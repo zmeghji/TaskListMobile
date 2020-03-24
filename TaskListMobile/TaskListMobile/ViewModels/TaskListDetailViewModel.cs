@@ -16,7 +16,7 @@ namespace TaskListMobile.ViewModels
         {
             _taskListRepository = taskListRepository;
 
-            Model = _taskListRepository.GetByDate(taskListDate);
+            Model = _taskListRepository.Get(taskListDate);
             
             if (Model == null)
             {
