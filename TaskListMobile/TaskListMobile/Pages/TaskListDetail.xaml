@@ -8,14 +8,41 @@
     <ContentPage.Content>
         <StackLayout>
             <Label>Task List Detail Page</Label>
-            <Label Text="{Binding Model.Date, StringFormat='{0:MMMM dd, yyyy}'}"></Label>
+            <!--<Label Text="{Binding Model.Date, StringFormat='{0:MMMM dd, yyyy}'}"></Label>-->
+            <Label Text="{Binding Date, StringFormat='{0:MMMM dd, yyyy}'}"></Label>
+
             <ListView 
                 CachingStrategy="RecycleElement" 
                 x:Name="TaskItemsListView" 
-                ItemsSource="{Binding Model.TaskItems}">
+                ItemsSource="{Binding TaskItems}">
+
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Name}" Detail="{Binding Status}" />
+                        <ViewCell>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="{Binding Name}">
+                                </Label>
+                                <CheckBox 
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding IsCompleted, Mode=TwoWay}}"/>
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Text="{Binding IsCompleted}"></Label>
+                            </Grid>
+                        </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

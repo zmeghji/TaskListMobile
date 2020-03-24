@@ -23,5 +23,6 @@ namespace TaskListMobile.Pages
             BindingContext = ViewModel;
         }
 
+        
     }
 }

@@ -8,21 +8,49 @@ using TaskListMobileData.Repositories;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Acr.UserDialogs;
+using System.Linq;
+using System.ComponentModel;
 
 namespace TaskListMobile.ViewModels
 {
     public class TaskListDetailViewModel : ViewModelBase
     {
         private readonly ITaskListRepository _taskListRepository;
-        private TaskList _model;
-        public TaskList Model
+        public ObservableCollection<TaskItemViewModel> TaskItems { get; set; }
+        public TaskListDetailViewModel(ITaskListRepository taskListRepository, DateTime taskListDate)
         {
-            get { return _model; }
-            private set
+            _taskListRepository = taskListRepository;
+
+            var taskList = _taskListRepository.Get(taskListDate);
+
+            if (taskList == null)
             {
-                _model = value;
-                RaisePropertyChangedEvent(nameof(Model));
+                taskList = new TaskList
+                {
+                    Date = taskListDate,
+                };
+                _taskListRepository.Create(taskList);
             }
+            Id = taskList.Id;
+            Date = taskList.Date;
+            TaskItems = new ObservableCollection<TaskItemViewModel>(
+                taskList.TaskItems.Select(t => new TaskItemViewModel(t, (s, a) => TaskListChanged()))
+                );
+
+            TaskItems.CollectionChanged+= (s, a) =>TaskListChanged();
+        }
+        private void TaskListChanged()
+        {
+            _taskListRepository.Update(new TaskList
+            {
+                Id = Id,
+                Date = Date,
+                TaskItems = TaskItems.Select(t => new TaskItem
+                {
+                    Name = t.Name,
+                    Status = (t.IsCompleted ? TaskItemStatus.Completed : TaskItemStatus.Pending)
+                }).ToList()
+            });
         }
         public ICommand DisplayCreateDialogCommand => new Command(OnClickedCreateButton);
         private async void OnClickedCreateButton()
@@ -31,40 +59,42 @@ namespace TaskListMobile.ViewModels
                 .SetTitle("Create Task")
                 .SetPlaceholder("Enter Name")
                 .SetInputMode(InputType.Name));
-            Model.TaskItems.Add(new TaskItem
+
+            var newTaskItem = new TaskItem
             {
                 Name = newTaskName.Text,
                 Status = TaskItemStatus.Pending
-            });
-            _taskListRepository.Update(Model);
+            };
+            TaskItems.Add(new TaskItemViewModel(newTaskItem, (s, a) => TaskListChanged()));
         }
 
-        public TaskListDetailViewModel(ITaskListRepository taskListRepository, DateTime taskListDate)
+        public int Id { get; }
+        public DateTime Date { get; }
+
+    }
+    public class TaskItemViewModel : ViewModelBase
+    {
+        private TaskItem _model;
+        public TaskItemViewModel(TaskItem model, System.ComponentModel.PropertyChangedEventHandler eventHandler)
         {
-            _taskListRepository = taskListRepository;
-
-            Model = _taskListRepository.Get(taskListDate);
-
-            if (Model == null)
+            _model = model;
+            PropertyChanged += eventHandler;
+        }
+        public string Name { get { return _model.Name; } }
+        public bool IsCompleted
+        {
+            get { return _model.Status == TaskItemStatus.Completed; }
+            set
             {
-                Model = new TaskList
+                if (value)
                 {
-                    Date = taskListDate,
-                    TaskItems = new List<TaskItem>
-                    {
-                        new TaskItem
-                        {
-                            Name = "Install Visual Studio",
-                            Status = TaskItemStatus.Completed
-                        },
-                        new TaskItem
-                        {
-                            Name = "Install Windows SDK",
-                            Status = TaskItemStatus.Pending
-                        }
-                    }
-                };
-                _taskListRepository.Create(Model);
+                    _model.Status = TaskItemStatus.Completed;
+                }
+                else
+                {
+                    _model.Status = TaskItemStatus.Pending;
+                }
+                RaisePropertyChangedEvent(nameof(_model.Status));
             }
         }
     }

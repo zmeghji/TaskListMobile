@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using TaskListMobile.Configuration;
 using TaskListMobile.Pages;
 using TaskListMobile.ViewModels;
@@ -11,19 +12,23 @@ namespace TaskListMobile.Sevices
 {
     public interface INavigationService
     {
-        void GoToTaskListDetails(DateTime? date);
+        Task GoToTaskListDetails(DateTime? date);
         void GoToTaskListIndex();
 
     }
     public class NavigationService : INavigationService
     {
-        public void GoToTaskListDetails(DateTime? date)
+        public async Task GoToTaskListDetails(DateTime? date)
         {
             date = date ?? DateTime.Now.Date;
             var viewModel = new TaskListDetailViewModel(
                 DIContainer.Resolve<ITaskListRepository>(),
                 date.Value);
-            Application.Current.MainPage = new TaskListDetail(viewModel);
+            await Application.Current.MainPage.Navigation.PushAsync(
+                
+                    new TaskListDetail(viewModel)
+                
+                );
         }
 
         public void GoToTaskListIndex()
@@ -32,7 +37,7 @@ namespace TaskListMobile.Sevices
                 DIContainer.Resolve<ITaskListRepository>(),
                 DateTime.Now.Date,
                 DIContainer.Resolve<INavigationService>());
-            Application.Current.MainPage = new TaskListIndex(viewModel);
+            Application.Current.MainPage = new NavigationPage (new TaskListIndex(viewModel));
         }
     }
 }

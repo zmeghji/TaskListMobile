@@ -15,7 +15,7 @@ namespace TaskListMobile.ViewModels
 {
     public class TaskListIndexViewModel : ViewModelBase
     {
-        private ObservableCollection<TaskList> _model;
+        public ObservableCollection<TaskList> TaskLists { get; set; }
         private readonly ITaskListRepository _taskListRepository;
         private readonly INavigationService _navigationService;
 
@@ -26,14 +26,16 @@ namespace TaskListMobile.ViewModels
         {
             _taskListRepository = taskListRepository;
             _navigationService = navigationService;
-            _model = new ObservableCollection<TaskList>(
+            //_model = new ObservableCollection<TaskList>(
+            //    _taskListRepository.Get(taskListDate, null));
+            TaskLists = new ObservableCollection<TaskList>(
                 _taskListRepository.Get(taskListDate, null));
         }
 
         public ICommand GoToTaskListCommand => new Command<TaskList>(OnClickTaskList);
         private async void OnClickTaskList(TaskList taskList)
         {
-            _navigationService.GoToTaskListDetails(taskList.Date);
+           await _navigationService.GoToTaskListDetails(taskList.Date);
         }
         public ICommand DisplayCreateDialogCommand => new Command(OnClickedCreateButton);
         private async void OnClickedCreateButton()
@@ -43,16 +45,16 @@ namespace TaskListMobile.ViewModels
                 .SetPlaceholder("Enter Date (MM-dd-yyyy)")
                 .SetInputMode(InputType.Name));
             var date = DateTime.Parse(dateString.Text);
-            _navigationService.GoToTaskListDetails(date);
+            await _navigationService.GoToTaskListDetails(date);
         }
-        public ObservableCollection<TaskList> TaskLists
-        {
-            get => _model;
-            private set
-            {
-                _model = value;
-                RaisePropertyChangedEvent(nameof(TaskLists));
-            }
-        }
+        //public ObservableCollection<TaskList> TaskLists
+        //{
+        //    get => _model;
+        //    private set
+        //    {
+        //        _model = value;
+        //        RaisePropertyChangedEvent(nameof(TaskLists));
+        //    }
+        //}
     }
 }
