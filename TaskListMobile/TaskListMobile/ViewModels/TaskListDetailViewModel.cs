@@ -96,12 +96,17 @@ namespace TaskListMobile.ViewModels
         private async void OnClickedTaskItem(string taskItemName)
         {
             var taskItemToEdit = _taskItems.First(s => s.Name == taskItemName);
-            var newTaskName = await UserDialogs.Instance.PromptAsync(new PromptConfig()
+            var promptResult = await UserDialogs.Instance.PromptAsync(new PromptConfig()
                 .SetTitle("Edit Task")
                 .SetText(taskItemToEdit.Name)
                 .SetPlaceholder("Edit Name")
                 .SetInputMode(InputType.Name));
-            taskItemToEdit.Name = newTaskName.Text;
+
+            if (promptResult.Ok)
+            {
+                taskItemToEdit.Name = promptResult.Text;
+            }
+
         }
         #endregion
         #region create-button

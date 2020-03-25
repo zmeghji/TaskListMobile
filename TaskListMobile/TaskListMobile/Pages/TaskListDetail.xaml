@@ -7,9 +7,9 @@
              x:Class="TaskListMobile.Pages.TaskListDetail">
     <ContentPage.Content>
         <StackLayout>
-            <Grid>
+            <Grid >
                 <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>

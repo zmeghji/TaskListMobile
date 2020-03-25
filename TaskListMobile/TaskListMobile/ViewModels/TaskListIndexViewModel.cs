@@ -40,12 +40,15 @@ namespace TaskListMobile.ViewModels
         public ICommand DisplayCreateDialogCommand => new Command(OnClickedCreateButton);
         private async void OnClickedCreateButton()
         {
-            var dateString = await UserDialogs.Instance.PromptAsync(new PromptConfig()
+            var promptResult = await UserDialogs.Instance.PromptAsync(new PromptConfig()
                 .SetTitle("Create Task List")
                 .SetPlaceholder("Enter Date (MM-dd-yyyy)")
                 .SetInputMode(InputType.Name));
-            var date = DateTime.Parse(dateString.Text);
-            await _navigationService.GoToTaskListDetails(date);
+            if (promptResult.Ok)
+            {
+                var date = DateTime.Parse(promptResult.Text);
+                await _navigationService.GoToTaskListDetails(date);
+            }
         }
         //public ObservableCollection<TaskList> TaskLists
         //{
