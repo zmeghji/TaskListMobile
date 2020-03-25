@@ -36,11 +36,14 @@
                                 <CheckBox 
                                     Grid.Row="0"
                                     Grid.Column="1"
-                                    IsChecked="{Binding IsCompleted, Mode=TwoWay}}"/>
-                                <Label
+                                    IsChecked="{Binding IsCompleted, Mode=TwoWay}"/>
+                                <Button
                                     Grid.Row="0"
                                     Grid.Column="2"
-                                    Text="{Binding IsCompleted}"></Label>
+                                    Text="Delete"
+                                    CommandParameter="{Binding Name}"
+                                    Clicked="Button_Clicked"
+                                    ></Button>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

@@ -52,6 +52,13 @@ namespace TaskListMobile.ViewModels
                 }).ToList()
             });
         }
+
+        public ICommand DeleteTaskItemCommand => new Command<string>(OnClickDeleteButton);
+        private async void OnClickDeleteButton(string taskItemName)
+        {
+            var taskItemToRemove = TaskItems.First(s => s.Name == taskItemName);
+            TaskItems.Remove(taskItemToRemove);
+        }
         public ICommand DisplayCreateDialogCommand => new Command(OnClickedCreateButton);
         private async void OnClickedCreateButton()
         {

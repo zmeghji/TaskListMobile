@@ -23,6 +23,9 @@ namespace TaskListMobile.Pages
             BindingContext = ViewModel;
         }
 
-        
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            ViewModel.DeleteTaskItemCommand.Execute( ((Xamarin.Forms.Button)sender).CommandParameter.ToString());
+        }
     }
 }
