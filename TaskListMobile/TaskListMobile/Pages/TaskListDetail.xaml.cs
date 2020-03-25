@@ -27,5 +27,11 @@ namespace TaskListMobile.Pages
         {
             ViewModel.DeleteTaskItemCommand.Execute( ((Xamarin.Forms.Button)sender).CommandParameter.ToString());
         }
+
+        private void Button_Clicked_1(object sender, EventArgs e)
+        {
+            ViewModel.DisplayEditDialogCommand.Execute(((Button)sender).Text);
+
+        }
     }
 }
