@@ -13,8 +13,6 @@ namespace TaskListMobile.Sevices
     public interface INavigationService
     {
         Task GoToTaskListDetails(DateTime? date);
-        void GoToTaskListIndex();
-
     }
     public class NavigationService : INavigationService
     {
@@ -24,20 +22,8 @@ namespace TaskListMobile.Sevices
             var viewModel = new TaskListDetailViewModel(
                 DIContainer.Resolve<ITaskListRepository>(),
                 date.Value);
-            await Application.Current.MainPage.Navigation.PushAsync(
-                
-                    new TaskListDetail(viewModel)
-                
-                );
+            Application.Current.MainPage = new NavigationPage(new TaskListDetail(viewModel));
         }
 
-        public void GoToTaskListIndex()
-        {
-            var viewModel = new TaskListIndexViewModel(
-                DIContainer.Resolve<ITaskListRepository>(),
-                DateTime.Now.Date,
-                DIContainer.Resolve<INavigationService>());
-            Application.Current.MainPage = new NavigationPage (new TaskListIndex(viewModel));
-        }
     }
 }

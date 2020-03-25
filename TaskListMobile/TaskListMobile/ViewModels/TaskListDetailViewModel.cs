@@ -10,14 +10,15 @@ using Xamarin.Forms;
 using Acr.UserDialogs;
 using System.Linq;
 using System.ComponentModel;
+using TaskListMobile.Sevices;
 
 namespace TaskListMobile.ViewModels
 {
     public class TaskListDetailViewModel : ViewModelBase
     {
         private readonly ITaskListRepository _taskListRepository;
-
         private ObservableCollection<TaskItemViewModel> _taskItems;
+        private bool _loadingAnotherList;
         public ObservableCollection<TaskItemViewModel> FilteredTaskItems
         {
             get
@@ -31,13 +32,11 @@ namespace TaskListMobile.ViewModels
                     return new ObservableCollection<TaskItemViewModel>(_taskItems.Where(t => !t.IsCompleted));
                 }
             }
-            private set { _taskItems = value;}
+            private set { _taskItems = value; }
         }
-
-        public TaskListDetailViewModel(ITaskListRepository taskListRepository, DateTime taskListDate)
+        private void LoadNewTaskList(DateTime taskListDate)
         {
-            _taskListRepository = taskListRepository;
-
+            _loadingAnotherList = true;
             var taskList = _taskListRepository.Get(taskListDate);
 
             if (taskList == null)
@@ -53,22 +52,34 @@ namespace TaskListMobile.ViewModels
             _taskItems = new ObservableCollection<TaskItemViewModel>(
                 taskList.TaskItems.Select(t => new TaskItemViewModel(t, (s, a) => TaskListChanged()))
                 );
-
+            RaisePropertyChangedEvent(nameof(FilteredTaskItems));
+            _loadingAnotherList = false;
             _taskItems.CollectionChanged += (s, a) => TaskListChanged();
+        }
+
+        public TaskListDetailViewModel(
+            ITaskListRepository taskListRepository,
+            DateTime taskListDate)
+        {
+            _taskListRepository = taskListRepository;
+            LoadNewTaskList(taskListDate);
         }
         private void TaskListChanged()
         {
-            RaisePropertyChangedEvent(nameof(FilteredTaskItems));
-            _taskListRepository.Update(new TaskList
+            if (!_loadingAnotherList)
             {
-                Id = Id,
-                Date = Date,
-                TaskItems = _taskItems.Select(t => new TaskItem
+                RaisePropertyChangedEvent(nameof(FilteredTaskItems));
+                _taskListRepository.Update(new TaskList
                 {
-                    Name = t.Name,
-                    Status = (t.IsCompleted ? TaskItemStatus.Completed : TaskItemStatus.Pending)
-                }).ToList()
-            });
+                    Id = Id,
+                    Date = Date,
+                    TaskItems = _taskItems.Select(t => new TaskItem
+                    {
+                        Name = t.Name,
+                        Status = (t.IsCompleted ? TaskItemStatus.Completed : TaskItemStatus.Pending)
+                    }).ToList()
+                });
+            }
         }
         #region show-completed-toggle
         private bool _showCompleted;
@@ -81,6 +92,13 @@ namespace TaskListMobile.ViewModels
                 RaisePropertyChangedEvent(nameof(ShowCompleted));
                 RaisePropertyChangedEvent(nameof(FilteredTaskItems));
             }
+        }
+        #endregion
+        #region change-to-another-day
+        public ICommand GoListForAnotherDayCommand => new Command<DateTime>(OnDateSelected);
+        private async void OnDateSelected(DateTime date)
+        {
+            LoadNewTaskList(date);
         }
         #endregion
         #region delete-button
@@ -126,43 +144,9 @@ namespace TaskListMobile.ViewModels
             _taskItems.Add(new TaskItemViewModel(newTaskItem, (s, a) => TaskListChanged()));
         }
         #endregion
-        public int Id { get; }
-        public DateTime Date { get; }
+        public int Id { get; private set; }
+        public DateTime Date { get; set; }
 
     }
-    #region task-item-view-model
-    public class TaskItemViewModel : ViewModelBase
-    {
-        private TaskItem _model;
-        public TaskItemViewModel(TaskItem model, System.ComponentModel.PropertyChangedEventHandler eventHandler)
-        {
-            _model = model;
-            PropertyChanged += eventHandler;
-        }
-        public string Name { 
-            get { return _model.Name; }
-            set
-            {
-                _model.Name = value;
-                RaisePropertyChangedEvent(nameof(Name));
-            }
-        }
-        public bool IsCompleted
-        {
-            get { return _model.Status == TaskItemStatus.Completed; }
-            set
-            {
-                if (value)
-                {
-                    _model.Status = TaskItemStatus.Completed;
-                }
-                else
-                {
-                    _model.Status = TaskItemStatus.Pending;
-                }
-                RaisePropertyChangedEvent(nameof(_model.Status));
-            }
-        }
-    }
-    #endregion
+   
 }

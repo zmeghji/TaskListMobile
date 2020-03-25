@@ -7,19 +7,23 @@
              x:Class="TaskListMobile.Pages.TaskListDetail">
     <ContentPage.Content>
         <StackLayout>
+
+            
             <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label 
+                <DatePicker
                     Grid.Row="0"
                     Grid.Column="0"
-                    Text="{Binding Date, StringFormat='{0:MMMM dd, yyyy}'}">
-                </Label>
+                    Date="{Binding Date}"
+                    DateSelected="DatePicker_DateSelected"
+                    >
+                </DatePicker>
                 <Switch
                     Grid.Row="0"
                     Grid.Column="1"

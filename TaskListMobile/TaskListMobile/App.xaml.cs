@@ -13,7 +13,7 @@ namespace TaskListMobile
         {
             InitializeComponent();
             DIContainer.RegisterDependencies();
-            DIContainer.Resolve<INavigationService>().GoToTaskListIndex();
+            DIContainer.Resolve<INavigationService>().GoToTaskListDetails(DateTime.Now.Date);
         }
 
         protected override void OnStart()

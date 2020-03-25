@@ -8,6 +8,6 @@ namespace TaskListMobileData.Models
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public List<TaskItem> TaskItems { get; set; }
+        public List<TaskItem> TaskItems { get; set; } = new List<TaskItem>();
     }
 }

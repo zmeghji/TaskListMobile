@@ -33,5 +33,10 @@ namespace TaskListMobile.Pages
             ViewModel.DisplayEditDialogCommand.Execute(((Button)sender).Text);
 
         }
+
+        private void DatePicker_DateSelected(object sender, DateChangedEventArgs e)
+        {
+            ViewModel.GoListForAnotherDayCommand.Execute(e.NewDate);
+        }
     }
 }
