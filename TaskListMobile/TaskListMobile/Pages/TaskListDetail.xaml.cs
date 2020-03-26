@@ -44,5 +44,10 @@ namespace TaskListMobile.Pages
             ViewModel.RescheduleDialogCommand.Execute(((Xamarin.Forms.Button)sender).CommandParameter.ToString());
 
         }
+
+        private void Button_Clicked_3(object sender, EventArgs e)
+        {
+            ViewModel.MarkForMoveCommand.Execute(((Xamarin.Forms.Button)sender).CommandParameter.ToString());
+        }
     }
 }

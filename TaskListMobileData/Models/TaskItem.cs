@@ -9,5 +9,6 @@ namespace TaskListMobileData.Models
     {
         public string Name { get; set; }
         public TaskItemStatus Status { get; set; }
+        public int Index { get; set; }
     }
 }

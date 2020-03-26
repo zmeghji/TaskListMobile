@@ -41,20 +41,22 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid>
+                            <Grid >
                                 <Grid.RowDefinitions>
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition Width="8*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Button
                                     Grid.Row="0"
                                     Grid.Column="0"
                                     Text="{Binding Name}"
+                                    BackgroundColor="White"
                                     Clicked="Button_Clicked_1"
                                     >
                                 </Button>
@@ -66,16 +68,26 @@
                                 <Button
                                     Grid.Row="0"
                                     Grid.Column="2"
-                                    Text="Reschedule"
+                                    BackgroundColor="{Binding RowBackgroundColor}"
+                                    Text="Swap"
                                     CommandParameter="{Binding Name}"
-                                    Clicked="Button_Clicked_2"
+                                    Clicked="Button_Clicked_3"
                                     ></Button>
                                 <Button
                                     Grid.Row="0"
                                     Grid.Column="3"
+                                    Text="Reschedule"
+                                    CommandParameter="{Binding Name}"
+                                    Clicked="Button_Clicked_2"
+                                    BackgroundColor="LightBlue"
+                                    ></Button>
+                                <Button
+                                    Grid.Row="0"
+                                    Grid.Column="4"
                                     Text="Delete"
                                     CommandParameter="{Binding Name}"
                                     Clicked="Button_Clicked"
+                                    BackgroundColor="LightSalmon"
                                     ></Button>
                             </Grid>
                         </ViewCell>

@@ -8,11 +8,16 @@ namespace TaskListMobile.ViewModels
 {
     public class TaskItemViewModel : ViewModelBase
     {
-        private TaskItem _model;
+        public TaskItem _model;
         public TaskItemViewModel(TaskItem model, System.ComponentModel.PropertyChangedEventHandler eventHandler)
         {
             _model = model;
             PropertyChanged += eventHandler;
+        }
+        public int Index
+        {
+            get { return _model.Index; }
+             set { _model.Index = value; RaisePropertyChangedEvent(nameof(Index)); }
         }
         public string Name
         {
@@ -22,6 +27,16 @@ namespace TaskListMobile.ViewModels
                 _model.Name = value;
                 RaisePropertyChangedEvent(nameof(Name));
             }
+        }
+        public bool _markedForMove;
+        public bool MarkedForMove
+        {
+            get { return _markedForMove; }
+            set { _markedForMove = value; RaisePropertyChangedEvent(nameof(MarkedForMove)); }
+        }
+        public string RowBackgroundColor
+        {
+            get { if (MarkedForMove) { return "Lavender"; } else { return "White"; } }
         }
         public bool IsCompleted
         {

@@ -25,11 +25,11 @@ namespace TaskListMobile.ViewModels
             {
                 if (ShowCompleted)
                 {
-                    return _taskItems;
+                    return new ObservableCollection<TaskItemViewModel>(_taskItems.OrderBy(t => t.Index));
                 }
                 else
                 {
-                    return new ObservableCollection<TaskItemViewModel>(_taskItems.Where(t => !t.IsCompleted));
+                    return new ObservableCollection<TaskItemViewModel>(_taskItems.Where(t => !t.IsCompleted).OrderBy(t => t.Index));
                 }
             }
             private set { _taskItems = value; }
@@ -73,11 +73,7 @@ namespace TaskListMobile.ViewModels
                 {
                     Id = Id,
                     Date = Date,
-                    TaskItems = _taskItems.Select(t => new TaskItem
-                    {
-                        Name = t.Name,
-                        Status = (t.IsCompleted ? TaskItemStatus.Completed : TaskItemStatus.Pending)
-                    }).ToList()
+                    TaskItems = _taskItems.Select(t => t._model).ToList()
                 });
             }
         }
@@ -127,6 +123,29 @@ namespace TaskListMobile.ViewModels
 
         }
         #endregion
+        #region mark-for-move-button
+        public ICommand MarkForMoveCommand => new Command<string>(OnClickedMoveButton);
+        private async void OnClickedMoveButton(string taskItemName)
+        {
+            var taskItemToMove = _taskItems.First(s => s.Name == taskItemName);
+            if (taskItemToMove.MarkedForMove)
+            {
+                taskItemToMove.MarkedForMove = false;
+            }
+            else if (_taskItems.Any(t => t.MarkedForMove))
+            {
+                var itemAlreadyMarkedToMove = _taskItems.First(t => t.MarkedForMove);
+                var tmpIndex = itemAlreadyMarkedToMove.Index;
+                itemAlreadyMarkedToMove.Index = taskItemToMove.Index;
+                taskItemToMove.Index = tmpIndex;
+                itemAlreadyMarkedToMove.MarkedForMove = false;
+            }
+            else
+            {
+                taskItemToMove.MarkedForMove = true;
+            }
+        }
+        #endregion
         #region reschedule-button
         public ICommand RescheduleDialogCommand => new Command<string>(OnClickedRescheduleButton);
         private async void OnClickedRescheduleButton(string taskItemName)
@@ -140,7 +159,7 @@ namespace TaskListMobile.ViewModels
                 var taskItemToReschedule = _taskItems.First(s => s.Name == taskItemName);
                 _taskItems.Remove(taskItemToReschedule);
                 _taskListRepository.MoveTask(
-                    taskItem: new TaskItem {Name = taskItemToReschedule.Name, Status = TaskItemStatus.Pending },
+                    taskItem: taskItemToReschedule._model,
                     dateToMoveTo: promptResult.SelectedDate);
             }
 
@@ -158,7 +177,8 @@ namespace TaskListMobile.ViewModels
             var newTaskItem = new TaskItem
             {
                 Name = newTaskName.Text,
-                Status = TaskItemStatus.Pending
+                Status = TaskItemStatus.Pending,
+                Index = _taskItems.Count
             };
             _taskItems.Add(new TaskItemViewModel(newTaskItem, (s, a) => TaskListChanged()));
         }
@@ -167,5 +187,5 @@ namespace TaskListMobile.ViewModels
         public DateTime Date { get; set; }
 
     }
-   
+
 }
