@@ -1,6 +1,7 @@
 ﻿using LiteDB;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TaskListMobileData.Models;
 
@@ -8,6 +9,7 @@ namespace TaskListMobileData.Repositories
 {
     public interface ITaskListRepository 
     {
+        void MoveTask(TaskItem taskItem, DateTime dateToMoveTo);
         TaskList Create(TaskList taskList);
         TaskList Update(TaskList taskList);
         TaskList Get(DateTime date);
@@ -52,6 +54,13 @@ namespace TaskListMobileData.Repositories
             {
                 return queryable.ToList();
             }
+        }
+
+        public void MoveTask(TaskItem taskItem,  DateTime dateToMoveTo)
+        {
+            var taskListToMoveTo = _connection.GetCollection<TaskList>().Query().Where(t => t.Date == dateToMoveTo).SingleOrDefault();
+            taskListToMoveTo.TaskItems.Add(taskItem);
+            _connection.GetCollection<TaskList>().Update(taskListToMoveTo);
         }
 
         public TaskList Update(TaskList taskList)

@@ -127,6 +127,25 @@ namespace TaskListMobile.ViewModels
 
         }
         #endregion
+        #region reschedule-button
+        public ICommand RescheduleDialogCommand => new Command<string>(OnClickedRescheduleButton);
+        private async void OnClickedRescheduleButton(string taskItemName)
+        {
+            var taskItemToEdit = _taskItems.First(s => s.Name == taskItemName);
+
+            var promptResult = await UserDialogs.Instance.DatePromptAsync(new DatePromptConfig());
+
+            if (promptResult.Ok)
+            {
+                var taskItemToReschedule = _taskItems.First(s => s.Name == taskItemName);
+                _taskItems.Remove(taskItemToReschedule);
+                _taskListRepository.MoveTask(
+                    taskItem: new TaskItem {Name = taskItemToReschedule.Name, Status = TaskItemStatus.Pending },
+                    dateToMoveTo: promptResult.SelectedDate);
+            }
+
+        }
+        #endregion
         #region create-button
         public ICommand DisplayCreateDialogCommand => new Command(OnClickedCreateButton);
         private async void OnClickedCreateButton()

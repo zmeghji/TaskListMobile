@@ -38,5 +38,11 @@ namespace TaskListMobile.Pages
         {
             ViewModel.GoListForAnotherDayCommand.Execute(e.NewDate);
         }
+
+        private void Button_Clicked_2(object sender, EventArgs e)
+        {
+            ViewModel.RescheduleDialogCommand.Execute(((Xamarin.Forms.Button)sender).CommandParameter.ToString());
+
+        }
     }
 }

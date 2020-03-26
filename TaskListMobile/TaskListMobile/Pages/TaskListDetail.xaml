@@ -46,9 +46,10 @@
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                                    <ColumnDefinition Width="2*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Button
                                     Grid.Row="0"
@@ -65,6 +66,13 @@
                                 <Button
                                     Grid.Row="0"
                                     Grid.Column="2"
+                                    Text="Reschedule"
+                                    CommandParameter="{Binding Name}"
+                                    Clicked="Button_Clicked_2"
+                                    ></Button>
+                                <Button
+                                    Grid.Row="0"
+                                    Grid.Column="3"
                                     Text="Delete"
                                     CommandParameter="{Binding Name}"
                                     Clicked="Button_Clicked"

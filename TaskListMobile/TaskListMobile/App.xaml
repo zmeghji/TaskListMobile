@@ -7,8 +7,5 @@
              mc:Ignorable="d"
              x:Class="TaskListMobile.App">
     <Application.Resources>
-        <converters:StatusBoolConverter x:Key="StatusBoolConverter">
-
-        </converters:StatusBoolConverter>
     </Application.Resources>
 </Application>
